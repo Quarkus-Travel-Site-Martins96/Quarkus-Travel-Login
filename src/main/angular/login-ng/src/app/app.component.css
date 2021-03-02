@@ -1,0 +1,19 @@
+.content {
+  display: flex;
+  margin: 5%;
+  padding: 0 16px;
+  flex-direction: column;
+}
+
+.jwt-txt {
+	width: 90%;
+	word-wrap: break-word;
+}
+
+.home-btn {
+	max-width: 300px;
+	margin-top: 50px;
+	height: auto;
+	width: auto;
+	padding: 5px 0;
+}

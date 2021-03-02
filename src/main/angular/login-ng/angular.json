@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "login-ng": {
+    "login-fe": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/login-ng",
+          	"baseHref" : "/",
+          	"deployUrl": "/",
+            "outputPath": "../../resources/META-INF/resources",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -39,6 +41,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
+              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -61,18 +64,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "login-ng:build"
+            "browserTarget": "login-fe:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "login-ng:build:production"
+              "browserTarget": "login-fe:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "login-ng:build"
+            "browserTarget": "login-fe:build"
           }
         },
         "test": {
@@ -109,16 +112,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "login-ng:serve"
+            "devServerTarget": "login-fe:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "login-ng:serve:production"
+              "devServerTarget": "login-fe:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "login-ng"
+  "defaultProject": "login-fe",
+  "cli": {
+    "analytics": "75a6d281-0012-49e3-bc4d-e8b4da3012c2"
+  }
 }

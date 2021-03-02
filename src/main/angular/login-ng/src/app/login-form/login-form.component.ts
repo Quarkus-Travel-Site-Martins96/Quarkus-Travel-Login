@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { RestService } from '../rest-service';
-import { host } from 'src/environments/environment';
+import { homePageUrl, host } from 'src/environments/environment';
 import { HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
@@ -39,6 +39,8 @@ export class LoginFormComponent implements OnDestroy {
 				this.cookies.delete('user.jwt');
 				this.cookies.set('user.jwt', response.body);
 				this.displayError = false;
+				
+				window.location.href = homePageUrl;
 			}, error => {
 				console.error(error);
 				if (error.status === 403) {

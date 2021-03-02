@@ -47,6 +47,16 @@ h1 {
 	border-radius: 5px;
 }
 
+.login-btn:focus,
+.login-btn:hover {
+	background-color: #2a2;
+}
+
+.login-btn:active {
+	background-color: #6f6;
+	box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
 /* Input text user & pass */
 
 input {

@@ -84,7 +84,7 @@ public class Login {
     	if(token == null) {
     		log.info("Credentials are wrong");
     		try {
-				response.sendError(401);
+				response.sendError(403);
 			} catch (IOException e) {
 				log.error("Error during setting status in Servlet response");
 				throw new RuntimeException(e);

@@ -25,12 +25,13 @@ public class UserVO implements Serializable {
 	private String name;
 	private String surname;
 	private String country;
+	private String avatar;
 	
 	public UserVO() {
 	}
 
 	public UserVO(String username, String email, Set<String> groups, String birthdate, String name, String surname,
-			String country) {
+			String country, String avatar) {
 		super();
 		this.username = username;
 		this.email = email;
@@ -39,6 +40,7 @@ public class UserVO implements Serializable {
 		this.name = name;
 		this.surname = surname;
 		this.country = country;
+		this.avatar = avatar;
 	}
 
 	public String getUsername() {
@@ -89,11 +91,24 @@ public class UserVO implements Serializable {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	public String getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	@Override
+	public String toString() {
+		return "UserVO [username=" + username + ", email=" + email + ", groups=" + groups + ", birthdate=" + birthdate
+				+ ", name=" + name + ", surname=" + surname + ", country=" + country + ", avatar=" + avatar + "]";
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((avatar == null) ? 0 : avatar.hashCode());
 		result = prime * result + ((birthdate == null) ? 0 : birthdate.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
@@ -113,6 +128,11 @@ public class UserVO implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		UserVO other = (UserVO) obj;
+		if (avatar == null) {
+			if (other.avatar != null)
+				return false;
+		} else if (!avatar.equals(other.avatar))
+			return false;
 		if (birthdate == null) {
 			if (other.birthdate != null)
 				return false;
@@ -151,12 +171,6 @@ public class UserVO implements Serializable {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "UserVO [username=" + username + ", email=" + email + ", groups=" + groups + ", birthdate=" + birthdate
-				+ ", name=" + name + ", surname=" + surname + ", country=" + country + "]";
-	}
-	
 	public JsonObject toJSON() {
 		final JsonObjectBuilder job = Json.createObjectBuilder();
 		final JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -166,7 +180,8 @@ public class UserVO implements Serializable {
 				.add("birthdate", birthdate)
 				.add("name", name)
 				.add("surname", surname)
-				.add("country", country);
+				.add("country", country)
+				.add("avatar", avatar);
 		
 		groups.forEach(jab::add);
 		job.add("groups", jab.build());

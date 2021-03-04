@@ -6,6 +6,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 import org.jboss.logging.Logger;
 
@@ -36,6 +39,29 @@ public class LoginDBEJB implements LoginEJB {
 		} finally {
 			log.debug("Get Hotel Info Service END");
 		}
+	}
+	
+	
+	@Override
+	public JsonObject enrichClaims(JsonObject jwt) {
+		log.debug("Enrich token: " + jwt.toString());
+		final JsonObjectBuilder bldr = Json.createObjectBuilder(jwt);
+		UserVO user = null;
+		final LoginDAO dao = CDI.current().select(LoginDAO.class, new Default.Literal()).get();
+		try {
+			user = dao.getUserInfo(jwt.getString("upn"));
+		} catch (SQLException e) {
+			log.error("Error in SQL query: ", e);
+		}
+		
+		if (user == null) {
+			log.warn("User not found");
+			return jwt;
+		}
+		bldr.add("avatar", user.getAvatar());
+		
+		jwt = bldr.build();
+		return jwt;
 	}
 
 }

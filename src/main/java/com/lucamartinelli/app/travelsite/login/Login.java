@@ -1,10 +1,13 @@
 package com.lucamartinelli.app.travelsite.login;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.jboss.logging.Logger;
 
 import com.lucamartinelli.app.travelsite.login.ejb.LoginDBEJB;
@@ -67,28 +71,27 @@ public class Login {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Path("/login")
+    @Counted(name = "login-calls", displayName = "Login service invokations",
+    		description = "Number of login calls by users", absolute = true)
     public String login(final CredentialsVO cred) {
     	if (ejb == null) {
     		log.error("EJB is null, please check the configurations");
-    		try {
-				response.sendError(503, "Service Unavailable. Wrong Configurations");
-			} catch (IOException e) {
-				log.error("Error during setting status in Servlet response");
-				throw new RuntimeException(e);
-			}
+    		setError(503, "Service Unavailable. Wrong Configurations");
 			return null;
     	}
     	
-    	final String token = ejb.login(cred.getUsername(), cred.getPassword());
+    	String token = null;
+    	try {
+    		token = ejb.login(cred.getUsername(), cred.getPassword());
+    	} catch (RuntimeException e) {
+    		log.error("Error during execution login() ", e);
+    		setError(503, "Service Unavailable");
+    		return null;
+		}
     	
     	if(token == null) {
     		log.info("Credentials are wrong");
-    		try {
-				response.sendError(403);
-			} catch (IOException e) {
-				log.error("Error during setting status in Servlet response");
-				throw new RuntimeException(e);
-			}
+    		setError(403, null);
     		return "Credentials wrong";
     	}
     	
@@ -100,20 +103,48 @@ public class Login {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public String validate(final String jwt) {
-    	String result = null;
+    	JsonObject result = null;
 		try {
-			result = ValidateToken.validate(jwt);
+			log.debug("Validating jwt: " + jwt);
+			final String resultString = ValidateToken.validate(jwt);
+			if (resultString == null) {
+				setError(401, "Wrong token");
+			}
+			log.debug("JWT valid, decoded data: " + resultString);
+			result = Json.createReader(new ByteArrayInputStream(resultString.getBytes()))
+					.readObject();
 		} catch (ParseException e) {
 			log.error("Error during parse JWT: ", e);
 		}
     	if (result == null) {
-    		try {
-				response.sendError(401, "Wrong token");
-			} catch (IOException e) {
-				log.error("Error setting the error in response: ", e);
-				throw new RuntimeException(e);
-			}
+			setError(401, "Wrong token");
     	}
-    	return result;
+    	
+    	if (ejb == null) {
+    		log.warn("EJB is null, please check the configurations");
+    		log.warn("Not possible enrich the claims");
+    	} else {
+        	log.debug("Enrich jwt with additional claims");
+        	try {
+        		result = ejb.enrichClaims(result);
+        	} catch (RuntimeException e) {
+        		log.error("Error during execution validate() ", e);
+        		setError(503, "Service Unavailable");
+        		return null;
+    		}
+    	}
+    	
+    	return result.toString();
     }
+    
+    
+    private void setError(int error, String msg) {
+    	try {
+			response.sendError(error, msg);
+		} catch (IOException e) {
+			log.error(e);
+			throw new RuntimeException(e);
+		}
+    }
+    
 }

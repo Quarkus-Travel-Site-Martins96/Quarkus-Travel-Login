@@ -10,7 +10,7 @@ const loginUrl: string = host + '/login';
 @Component({
 	selector: 'app-login-form',
 	templateUrl: './login-form.component.html',
-	styleUrls: ['./login-form.component.css']
+	styleUrls: ['./login-form.component.css', 'login-form.background.components.less']
 })
 export class LoginFormComponent implements OnDestroy {
 

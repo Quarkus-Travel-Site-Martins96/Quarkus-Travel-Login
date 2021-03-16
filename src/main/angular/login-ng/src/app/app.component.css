@@ -1,19 +1,16 @@
 .content {
-  display: flex;
-  margin: 5%;
-  padding: 0 16px;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	position: relative;
+	background: #50a3a2;
+	background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+	background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+	background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+	background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
 }
 
 .jwt-txt {
 	width: 90%;
 	word-wrap: break-word;
-}
-
-.home-btn {
-	max-width: 300px;
-	margin-top: 50px;
-	height: auto;
-	width: auto;
-	padding: 5px 0;
 }

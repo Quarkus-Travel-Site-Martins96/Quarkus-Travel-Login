@@ -378,6 +378,8 @@
 
               if (error.status === 403) {
                 _this2.displayError = true;
+                _this2.userInput = "";
+                _this2.pwdInput = "";
                 console.log('Credential not valid ', error);
               } else console.log('Error in call, status ', error);
             });

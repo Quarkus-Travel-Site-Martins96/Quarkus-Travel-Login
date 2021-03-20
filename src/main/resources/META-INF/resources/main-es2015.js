@@ -198,6 +198,8 @@ class LoginFormComponent {
             console.error(error);
             if (error.status === 403) {
                 this.displayError = true;
+                this.userInput = "";
+                this.pwdInput = "";
                 console.log('Credential not valid ', error);
             }
             else

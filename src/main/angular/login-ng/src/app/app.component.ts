@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { host, homePageUrl } from '../environments/environment';
+import { Environment } from '../environments/environment';
 import { RestService } from './rest-service';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
-
-const validateUrl: string = host + '/validate';
 
 @Component({
 	selector: 'app-root',
@@ -12,21 +10,25 @@ const validateUrl: string = host + '/validate';
 	styleUrls: ['./app.component.css', './app.component-effects.less']
 })
 export class AppComponent {
+	
+	private validateUrl = this.env.getLoginHost() + '/validate';
+	private homePageUrl = this.env.getHomeHost();
     
 	public jwt: string;
 	
-	constructor(private rest: RestService, private cookies: CookieService) { 
+	constructor(private rest: RestService, private cookies: CookieService,
+			private env: Environment) { 
 		this.jwt = null;
 		let cookieJWT = this.cookies.get('user.jwt');
 		if (cookieJWT) {
 			
 			//JWT found, check if is valid
-			this.rest.sendPost<any>(validateUrl, cookieJWT, new HttpHeaders({
+			this.rest.sendPost<any>(this.validateUrl, cookieJWT, new HttpHeaders({
 				'content-type': 'text/plain'
 			}))
 			.subscribe(() => {
 				//JWT correct, move to Home Page
-				window.location.href = homePageUrl;
+				window.location.href = this.homePageUrl;
 			}, error => {
 				//JWT non correct or service not available
 				if (error.status === 401) {
@@ -46,7 +48,7 @@ export class AppComponent {
 	}
 	
 	public goToHome() {
-		window.location.href = homePageUrl;
+		window.location.href = this.homePageUrl;
 	}
 	
 }

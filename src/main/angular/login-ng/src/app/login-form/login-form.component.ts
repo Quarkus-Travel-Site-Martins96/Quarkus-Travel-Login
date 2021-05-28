@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { RestService } from '../rest-service';
-import { homePageUrl, host } from 'src/environments/environment';
+import { Environment } from 'src/environments/environment';
 import { HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 
-const loginUrl: string = host + '/login';
 
 @Component({
 	selector: 'app-login-form',
@@ -13,6 +12,9 @@ const loginUrl: string = host + '/login';
 	styleUrls: ['./login-form.component.css', 'login-form.background.components.less']
 })
 export class LoginFormComponent implements OnDestroy {
+	
+	private loginUrl: string = this.env.getLoginHost() + '/login';
+	private homePageUrl: string = this.env.getHomeHost();
 
 	@Output()
 	jwt = new EventEmitter<string>();
@@ -24,13 +26,14 @@ export class LoginFormComponent implements OnDestroy {
 
 	private loginSub: Subscription;
 
-	constructor(private rest: RestService, private cookies: CookieService) { }
+	constructor(private rest: RestService, private cookies: CookieService,
+			private env: Environment) { }
 
 	public login(): void {
 		if (this.loginSub)
 			this.loginSub.unsubscribe();
 
-		this.loginSub = this.rest.sendPostGetRawText(loginUrl, {
+		this.loginSub = this.rest.sendPostGetRawText(this.loginUrl, {
 				username: this.userInput,
 				password: this.pwdInput
 			}, new HttpHeaders({ 'content-type': 'application/json' }))
@@ -40,7 +43,7 @@ export class LoginFormComponent implements OnDestroy {
 				this.cookies.set('user.jwt', response.body);
 				this.displayError = false;
 				
-				window.location.href = homePageUrl;
+				window.location.href = this.homePageUrl;
 			}, error => {
 				console.error(error);
 				if (error.status === 403) {

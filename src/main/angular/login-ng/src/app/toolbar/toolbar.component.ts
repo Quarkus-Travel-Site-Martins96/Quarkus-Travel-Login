@@ -1,12 +1,10 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { homePageUrl, loginPageUrl, userManagementPageUrl } from 'src/environments/environment';
+import { Environment } from 'src/environments/environment';
 import { CookieManager } from '../cookie-utils';
 import { RestService } from '../rest-service';
 import { JWT } from './jwt-decode-vo';
-
-const validateUrl: string = loginPageUrl + "/validate";
 
 @Component({
 	selector: 'app-toolbar',
@@ -14,17 +12,19 @@ const validateUrl: string = loginPageUrl + "/validate";
 	styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit, AfterViewInit {
-
-	homeUrl: string = homePageUrl;
-	loginUrl: string = loginPageUrl;
-	userManagementUrl: string = userManagementPageUrl;
+	
+	private validateUrl: string = this.env.getLoginHost() + "/validate";
+	homeUrl: string = this.env.getHomeHost();
+	loginUrl: string = this.env.getLoginHost();
+	userManagementUrl: string = this.env.getUserManagerHost();
 
 	jwt: JWT = new JWT();
 	cookieJWT: string;
 
 	private sub: Subscription;
 
-	constructor(private cookieMng: CookieManager, private rest: RestService) {
+	constructor(private cookieMng: CookieManager, private rest: RestService,
+			private env: Environment) {
 		this.cookieJWT = this.cookieMng.getCookie('user.jwt');
 	}
 
@@ -36,7 +36,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 		if (this.cookieJWT) {
 			
 			//JWT found, check if is valid
-			this.sub = this.rest.sendPost<JWT>(validateUrl, this.cookieJWT, new HttpHeaders({
+			this.sub = this.rest.sendPost<JWT>(this.validateUrl, this.cookieJWT, new HttpHeaders({
 				'content-type': 'text/plain'
 			}))
 				.subscribe((resp) => {

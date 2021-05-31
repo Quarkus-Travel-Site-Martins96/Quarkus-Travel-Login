@@ -13,18 +13,17 @@ import { JWT } from './jwt-decode-vo';
 })
 export class ToolbarComponent implements OnInit, AfterViewInit {
 	
-	private validateUrl: string = this.env.getLoginHost() + "/validate";
-	homeUrl: string = this.env.getHomeHost();
-	loginUrl: string = this.env.getLoginHost();
-	userManagementUrl: string = this.env.getUserManagerHost();
+	private validateUrl: string = Environment.getLoginHost() + "/validate";
+	homeUrl: string = Environment.getHomeHost();
+	loginUrl: string = Environment.getLoginHost();
+	userManagementUrl: string = Environment.getUserManagerHost();
 
 	jwt: JWT = new JWT();
 	cookieJWT: string;
 
 	private sub: Subscription;
 
-	constructor(private cookieMng: CookieManager, private rest: RestService,
-			private env: Environment) {
+	constructor(private cookieMng: CookieManager, private rest: RestService) {
 		this.cookieJWT = this.cookieMng.getCookie('user.jwt');
 	}
 

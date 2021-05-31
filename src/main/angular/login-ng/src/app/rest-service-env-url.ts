@@ -1,40 +1,26 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-@Injectable({
-	providedIn: 'root'
-})
 export class RestServiceEnvUrl {
 
-	constructor(private http: HttpClient) { }
+	private constructor() { }
 
-	getHostUrl(appUrl: string): string {
-		let host: string = "";
+	static getHostUrl(appUrl: string): string {
+		let host: string;
 		
-		let headers: HttpHeaders = new HttpHeaders({
-			'accept': 'text/plain',
-			responseType: 'text'
-		});
+		console.log("Call!!!")
+		var request = new XMLHttpRequest();
+		request.open('GET', '/endpoint/' + appUrl, false);
+		request.send();
 		
-		this.http.get<string>('/endpoint/' + appUrl, {
-			headers,
-			observe: 'response'
-		}).subscribe(r => {
+		if (request.status === 200) {
+		  	let r: string = request.responseText;
 			console.log("response " + r)
-			host = r.body;
-		}, _err => {});
+			host = r;
+		} else {
+			console.error("Error retrieve endpoint");
+			host = "";
+		}
 		
+		console.log("chiamata fatta");
+		console.log("caricato? --> " + host);
 		return host;
-	}
-	
-	getHostUrlAll(): Observable<HttpResponse<Map<string, string>>> {
-		let headers: HttpHeaders = new HttpHeaders({
-			'accept': 'application/json'
-		});
-		return this.http.get<Map<string, string>>('/endpoint', {
-			headers,
-			observe: 'response'
-		});
 	}
 }

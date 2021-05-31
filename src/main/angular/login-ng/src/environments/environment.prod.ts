@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { RestServiceEnvUrl } from 'src/app/rest-service-env-url';
+import { EnvSingleton } from './env-singleton';
 
 export const environment = {
   production: true
 };
+
 
 
 @Injectable({
@@ -11,22 +13,34 @@ export const environment = {
 })
 export class Environment {
 	
-	constructor(private rest: RestServiceEnvUrl) { }
+	private static singleton: EnvSingleton = EnvSingleton.getInstance();
 	
-	public getHomeHost(): string {
-		return this.rest.getHostUrl('home');
+	private constructor() { }
+	
+	public static getHomeHost(): string {
+		if (!this.singleton.homeHost)
+			this.singleton.homeHost = RestServiceEnvUrl.getHostUrl('home');
+		return this.singleton.homeHost;
 	}
 	
-	public getHotelHost(): string {
-		return this.rest.getHostUrl('hotel');
+	public static getHotelHost(): string {
+		console.log("carco host hotel");
+		if (!this.singleton.hotelHost)
+			this.singleton.hotelHost = RestServiceEnvUrl.getHostUrl('hotel');
+		console.log("caricato " + this.singleton.hotelHost);
+		return this.singleton.hotelHost;
 	}
 	
-	public getLoginHost(): string {
-		return this.rest.getHostUrl('login');
+	public static getLoginHost(): string {
+		if (!this.singleton.loginHost)
+			this.singleton.loginHost = RestServiceEnvUrl.getHostUrl('login');
+		return this.singleton.loginHost;
 	}
 	
-	public getUserManagerHost(): string {
-		return this.rest.getHostUrl('user-management');
+	public static getUserManagerHost(): string {
+		if (!this.singleton.userMngHost)
+			this.singleton.userMngHost = RestServiceEnvUrl.getHostUrl('user-management');
+		return this.singleton.userMngHost;
 	}
 	
 	

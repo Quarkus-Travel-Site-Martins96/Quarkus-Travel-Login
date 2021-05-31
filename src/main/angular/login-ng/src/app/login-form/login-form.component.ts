@@ -13,8 +13,8 @@ import { Subscription } from 'rxjs';
 })
 export class LoginFormComponent implements OnDestroy {
 	
-	private loginUrl: string = this.env.getLoginHost() + '/login';
-	private homePageUrl: string = this.env.getHomeHost();
+	private loginUrl: string = Environment.getLoginHost() + '/login';
+	private homePageUrl: string = Environment.getHomeHost();
 
 	@Output()
 	jwt = new EventEmitter<string>();
@@ -26,8 +26,7 @@ export class LoginFormComponent implements OnDestroy {
 
 	private loginSub: Subscription;
 
-	constructor(private rest: RestService, private cookies: CookieService,
-			private env: Environment) { }
+	constructor(private rest: RestService, private cookies: CookieService) { }
 
 	public login(): void {
 		if (this.loginSub)

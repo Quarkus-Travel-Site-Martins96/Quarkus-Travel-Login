@@ -22,21 +22,21 @@ export const environment = {
 })
 export class Environment {
 	
-	constructor() { }
+	private constructor() { }
 	
-	public getHomeHost(): string {
+	public static getHomeHost(): string {
 		return 'http://localhost:8080';
 	}
 	
-	public getHotelHost(): string {
+	public static getHotelHost(): string {
 		return 'http://localhost:8081';
 	}
 	
-	public getLoginHost(): string {
+	public static getLoginHost(): string {
 		return 'http://localhost:7070';
 	}
 	
-	public getUserManagerHost(): string {
+	public static getUserManagerHost(): string {
 		return "http://localhost:7071";
 	}
 	

@@ -26,8 +26,8 @@ import io.quarkus.arc.Unremovable;
 @Default
 public class LoginDAO {
 	
-	public static final String USER_QUERY = "SELECT * FROM USERS WHERE username = ? AND password = ?";
-	public static final String USER_DATA_QUERY = "SELECT * FROM USERS WHERE username = ?";
+	public static final String USER_QUERY = "SELECT * FROM users WHERE username = ? AND password = ?";
+	public static final String USER_DATA_QUERY = "SELECT * FROM users WHERE username = ?";
 	
 	private AgroalDataSource datasource = null;
 	

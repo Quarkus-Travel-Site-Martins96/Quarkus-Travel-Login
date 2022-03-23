@@ -11,13 +11,12 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class AppComponent {
 	
-	private validateUrl = this.env.getLoginHost() + '/validate';
-	private homePageUrl = this.env.getHomeHost();
+	private validateUrl = Environment.getLoginHost() + '/validate';
+	private homePageUrl = Environment.getHomeHost();
     
 	public jwt: string;
 	
-	constructor(private rest: RestService, private cookies: CookieService,
-			private env: Environment) { 
+	constructor(private rest: RestService, private cookies: CookieService) { 
 		this.jwt = null;
 		let cookieJWT = this.cookies.get('user.jwt');
 		if (cookieJWT) {

@@ -5,7 +5,6 @@ export class RestServiceEnvUrl {
 	static getHostUrl(appUrl: string): string {
 		let host: string;
 		
-		console.log("Call!!!")
 		var request = new XMLHttpRequest();
 		request.open('GET', '/endpoint/' + appUrl, false);
 		request.send();

@@ -24,10 +24,8 @@ export class Environment {
 	}
 	
 	public static getHotelHost(): string {
-		console.log("carco host hotel");
 		if (!this.singleton.hotelHost)
 			this.singleton.hotelHost = RestServiceEnvUrl.getHostUrl('hotel');
-		console.log("caricato " + this.singleton.hotelHost);
 		return this.singleton.hotelHost;
 	}
 	

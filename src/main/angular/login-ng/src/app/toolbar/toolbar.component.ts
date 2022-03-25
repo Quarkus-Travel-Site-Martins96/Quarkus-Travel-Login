@@ -15,7 +15,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 	
 	private validateUrl: string = Environment.getLoginHost() + "/validate";
 	homeUrl: string = Environment.getHomeHost();
-	loginUrl: string = Environment.getLoginHost();
+	registrationUrl: string = Environment.getRegistrationHost();
 	userManagementUrl: string = Environment.getUserManagerHost();
 
 	jwt: JWT = new JWT();

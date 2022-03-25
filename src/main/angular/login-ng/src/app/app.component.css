@@ -2,7 +2,6 @@
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	position: relative;
 	background: #50a3a2;
 	background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
 	background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);

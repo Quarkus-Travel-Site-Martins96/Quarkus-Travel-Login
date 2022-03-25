@@ -34,6 +34,12 @@ export class Environment {
 			this.singleton.loginHost = RestServiceEnvUrl.getHostUrl('login');
 		return this.singleton.loginHost;
 	}
+
+	public static getRegistrationHost(): string {
+		if (!this.singleton.registrationHost)
+			this.singleton.registrationHost = RestServiceEnvUrl.getHostUrl('registration');
+		return this.singleton.registrationHost;
+	}
 	
 	public static getUserManagerHost(): string {
 		if (!this.singleton.userMngHost)

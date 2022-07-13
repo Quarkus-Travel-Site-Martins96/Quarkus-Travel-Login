@@ -25,6 +25,7 @@ import com.lucamartinelli.app.travelsite.login.ejb.LoginEJB;
 import com.lucamartinelli.app.travelsite.login.ejb.LoginInMemoryEJB;
 import com.lucamartinelli.app.travelsite.login.utils.ValidateToken;
 import com.lucamartinelli.app.travelsite.login.vo.CredentialsVO;
+import com.lucamartinelli.app.travelsite.login.vo.LoginException;
 
 import io.smallrye.jwt.auth.principal.ParseException;
 
@@ -83,6 +84,21 @@ public class Login {
     	String token = null;
     	try {
     		token = ejb.login(cred.getUsername(), cred.getPassword());
+    	} catch (LoginException e) {
+			log.warn("Error during login service: " + e.getErrorDescription());
+			if (e.getStatusCode() == 1) {
+				log.debug("Managing wrong credentials");
+	    		setError(403, null);
+	    		return "Credentials wrong";
+			} else if (e.getStatusCode() == 2) {
+				log.info("Managing pending status");
+	    		setError(409, null);
+	    		return "Pending";
+			} else {
+				log.error("Error during execution login() ", e);
+	    		setError(503, "Service Unavailable");
+	    		return null;
+			}
     	} catch (RuntimeException e) {
     		log.error("Error during execution login() ", e);
     		setError(503, "Service Unavailable");

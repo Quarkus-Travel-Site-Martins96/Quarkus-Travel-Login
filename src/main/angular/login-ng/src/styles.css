@@ -53,6 +53,7 @@ i {font-family: luois-sans-italic;}
 .text-center{text-align: center;}
 .vertical-center{align-self:center;}
 .clear{clear: both;}
+.space-10 {padding: 10px;display: block;clear: both;}
 
 form, input, button, div {z-index: 100}
 ul,il {z-index: 1}

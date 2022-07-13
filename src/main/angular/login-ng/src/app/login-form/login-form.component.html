@@ -1,19 +1,31 @@
 <div class="login-content">
-	<h1>Login:</h1>
-		<div class="container">
-			<form (ngSubmit)="login()">
-				<div class="login-form">
-						<label for="username-input">username</label>
-						<input type="text" class="login-input-text" 
-								id="username" name="username" [(ngModel)]="userInput" />
-						<label for="password-input">password</label>
-						<input type="password" class="login-input-text" 
-								id="password" name="password" [(ngModel)]="pwdInput" />
-						<button type="submit" class="login-btn"><span>Login</span></button>
-				</div>
-			</form>
+	<div *ngIf="!displayPending">
+		<h1>Login:</h1>
+			<div class="container">
+				<form (ngSubmit)="login()">
+					<div class="login-form">
+							<label for="username-input">username</label>
+							<input type="text" class="login-input-text" 
+									id="username" name="username" [(ngModel)]="userInput" />
+							<label for="password-input">password</label>
+							<input type="password" class="login-input-text" 
+									id="password" name="password" [(ngModel)]="pwdInput" />
+							<button type="submit" class="login-btn">
+								<span *ngIf="!isLoading">Login</span>
+								<span><img *ngIf="isLoading" src="assets/loading-login.gif" height="21"/></span>
+							</button>
+					</div>
+				</form>
+			</div>
+		<div *ngIf="displayCredentialError" class="error-login">
+			<span>Login error, credentials are not valid</span>
 		</div>
-	<div *ngIf="displayError" class="error-login">
-		<span>Login error, credentials are not valid</span>
+		<div *ngIf="displayError" class="error-login">
+			<span>Backend server error!</span>
+			<h2>{{ errorDetails }}</h2>
+		</div>
+	</div>
+	<div *ngIf="displayPending" class="error-login">
+		<app-login-pending [username]="userInput" (pendingFlag)="updatePending($event)"></app-login-pending>
 	</div>
 </div>

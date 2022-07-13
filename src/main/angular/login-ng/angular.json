@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "login-fe": {
+    "login-ng": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -14,7 +14,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
           	"baseHref" : "/",
-          	"deployUrl": "/",
             "outputPath": "../../resources/META-INF/resources",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -53,28 +52,37 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "50kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "login-fe:build"
-          },
           "configurations": {
             "production": {
-              "browserTarget": "login-fe:build:production"
+              "browserTarget": "login-ng:build:production"
+            },
+            "development": {
+              "browserTarget": "login-ng:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "login-fe:build"
+            "browserTarget": "login-ng:build"
           }
         },
         "test": {
@@ -111,18 +119,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "login-fe:serve"
+            "devServerTarget": "login-ng:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "login-fe:serve:production"
+              "devServerTarget": "login-ng:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "login-fe",
+  "defaultProject": "login-ng",
   "cli": {
     "analytics": false
   }

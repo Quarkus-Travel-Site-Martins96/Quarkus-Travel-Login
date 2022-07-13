@@ -7,12 +7,14 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { LoginPendingComponent } from './login-pending/login-pending.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		ToolbarComponent,
-		LoginFormComponent
+		LoginFormComponent,
+  LoginPendingComponent
 	],
 	imports: [
 		BrowserModule,

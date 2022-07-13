@@ -16,6 +16,8 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 
+import com.lucamartinelli.app.travelsite.login.vo.LoginException;
+import com.lucamartinelli.app.travelsite.login.vo.PendingUserVO;
 import com.lucamartinelli.app.travelsite.login.vo.UserVO;
 
 import io.agroal.api.AgroalDataSource;
@@ -26,7 +28,7 @@ import io.quarkus.arc.Unremovable;
 @Default
 public class LoginDAO {
 	
-	public static final String USER_QUERY = "SELECT * FROM users WHERE username = ? AND password = ?";
+	public static final String USER_QUERY = "SELECT * FROM user_credentials WHERE username = ? AND password = ?";
 	public static final String USER_DATA_QUERY = "SELECT * FROM users WHERE username = ?";
 	
 	private AgroalDataSource datasource = null;
@@ -40,7 +42,7 @@ public class LoginDAO {
 	}
 	
 	public UserVO getUser(final String username, final String password) 
-			throws SQLException {
+			throws SQLException, LoginException {
 		UserVO user = null;
 		log.debug(USER_QUERY + " --> using [username=" + username + "] [password=" + password + "]");
 		if (datasource == null) {
@@ -54,17 +56,27 @@ public class LoginDAO {
 			ps.setString(2, password);
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
-					user = new UserVO(
-							rs.getString("USERNAME"), 
-							rs.getString("EMAIL"), 
-							splitGroups(rs.getString("GROUPS")),
-							rs.getString("BIRTHDATE"),
-							rs.getString("NAME"),
-							rs.getString("SURNAME"),
-							rs.getString("COUNTRY"),
-							rs.getString("AVATAR"));
+					final PendingUserVO pendingUser = new PendingUserVO(
+							rs.getString("USERNAME"),
+							rs.getString("PASSWORD"),
+							rs.getString("PENDING"),
+							rs.getString("TMP_TOKEN"),
+							rs.getString("TMP_EMAIL")
+							);
+					if ("Y".equals(pendingUser.getPendingFlag())) {
+						log.debug("User " + username + " is in pending, show dedicated page");
+						throw new LoginException((short) 2, "User in pending state");
+					}
+					log.debug("User is not in pending, get full information");
+					
+					user = getUserInfo(username);
+					if (user == null) {
+						throw new LoginException((short) 1, "User credentials not valid");
+					}
+					
 				} else {
 					log.warn("Query return NO RESULT for user " + username);
+					throw new LoginException((short) 1, "User credentials not valid");
 				}
 			}
 			

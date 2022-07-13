@@ -28,6 +28,7 @@ public class EndpointUrl {
 		urlsMap.put("login", getLogin());
 		urlsMap.put("hotel", getHotel());
 		urlsMap.put("user-management", getUserManagement());
+		urlsMap.put("registration", getRegistration());
 		return urlsMap;
 	}
 	
@@ -53,6 +54,12 @@ public class EndpointUrl {
 	@Path("/user-management")
 	public String getUserManagement() {
 		return conf.getOptionalValue("endpoint.home", String.class).orElse("http://localhost:7071");
+	}
+	
+	@GET
+	@Path("/registration")
+	public String getRegistration() {
+		return conf.getOptionalValue("endpoint.registration", String.class).orElse("http://localhost:7171");
 	}
 	
 	

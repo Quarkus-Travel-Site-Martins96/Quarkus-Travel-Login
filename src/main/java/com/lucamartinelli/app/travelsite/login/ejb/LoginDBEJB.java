@@ -14,6 +14,7 @@ import org.jboss.logging.Logger;
 
 import com.lucamartinelli.app.travelsite.login.dao.LoginDAO;
 import com.lucamartinelli.app.travelsite.login.utils.GenerateToken;
+import com.lucamartinelli.app.travelsite.login.vo.LoginException;
 import com.lucamartinelli.app.travelsite.login.vo.UserVO;
 
 @ApplicationScoped
@@ -23,7 +24,7 @@ public class LoginDBEJB implements LoginEJB {
 	Logger log;
 
 	@Override
-	public String login(String username, String password) {
+	public String login(String username, String password) throws LoginException {
 		log.debug("Get Hotel Info Service START");
 		final LoginDAO dao = CDI.current().select(LoginDAO.class, new Default.Literal()).get();
 		try {

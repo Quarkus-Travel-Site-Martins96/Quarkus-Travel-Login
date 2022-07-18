@@ -71,7 +71,7 @@ public class Login {
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("/login")
+    @Path("login")
     @Counted(name = "login-calls", displayName = "Login service invokations",
     		description = "Number of login calls by users", absolute = true)
     public String login(final CredentialsVO cred) {
@@ -115,7 +115,7 @@ public class Login {
     }
     
     @POST
-    @Path("/validate")
+    @Path("validate")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public String validate(final String jwt) {

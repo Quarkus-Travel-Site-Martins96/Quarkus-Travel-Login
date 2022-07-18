@@ -38,7 +38,14 @@ export class CookieManager {
         d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
         let expires:string = `expires=${d.toUTCString()}`;
         let cpath:string = path ? `; path=${path}` : '';
-        document.cookie = `${name}=${value}; ${expires}${cpath}`;
+        const temp = location.host.split('.').reverse();
+        let domain:string = "domain=";
+        if (temp && temp.length > 1)
+            domain += '.' + temp[1] + '.' + temp[0];
+        else
+            domain += '.' + temp[0];
+        domain = domain.split(':')[0];
+        document.cookie = `${name}=${value}; ${domain}; ${expires}${cpath}`;
     }
 
     public consent(isConsent: boolean, e: any) {

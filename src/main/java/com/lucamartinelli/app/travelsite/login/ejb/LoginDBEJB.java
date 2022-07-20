@@ -14,6 +14,7 @@ import org.jboss.logging.Logger;
 
 import com.lucamartinelli.app.travelsite.login.dao.LoginDAO;
 import com.lucamartinelli.app.travelsite.login.utils.GenerateToken;
+import com.lucamartinelli.app.travelsite.login.utils.Hashing;
 import com.lucamartinelli.app.travelsite.login.vo.LoginException;
 import com.lucamartinelli.app.travelsite.login.vo.UserVO;
 
@@ -24,10 +25,14 @@ public class LoginDBEJB implements LoginEJB {
 	Logger log;
 
 	@Override
-	public String login(String username, String password) throws LoginException {
+	public String login(String username, String clearPassword) throws LoginException {
 		log.debug("Get Hotel Info Service START");
 		final LoginDAO dao = CDI.current().select(LoginDAO.class, new Default.Literal()).get();
 		try {
+			log.debugv("Hashing password {0}", clearPassword);
+			final String password = Hashing.hashString(clearPassword);
+			log.debugv("Hashed {0} into {1} ", clearPassword, password);
+			
 			final UserVO user = dao.getUser(username, password);
 			if (user == null) {
 				log.warn("User not found on DB or password is wrong");
@@ -59,7 +64,8 @@ public class LoginDBEJB implements LoginEJB {
 			log.warn("User not found");
 			return jwt;
 		}
-		bldr.add("avatar", user.getAvatar());
+		if (user.getAvatar() != null && !user.getAvatar().trim().isEmpty())
+			bldr.add("avatar", user.getAvatar());
 		
 		jwt = bldr.build();
 		return jwt;

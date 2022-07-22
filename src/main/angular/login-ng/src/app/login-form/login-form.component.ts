@@ -52,11 +52,8 @@ export class LoginFormComponent implements OnDestroy {
 					console.log('Login success');
 					this.jwt.emit(response.body);
 					this.cookies.delete('user.jwt');
-					this.cookies.set('user.jwt', response.body, {
-						path: '/',
-						sameSite: 'Strict',
-						domain: this.getCookieDomain()
-					});
+
+					this.cookies.set('user.jwt', response.body, 7, '/', this.getCookieDomain());
 					this.displayError = false;
 					window.location.href = this.homePageUrl;
 				} else {
@@ -107,6 +104,10 @@ export class LoginFormComponent implements OnDestroy {
 
 	private getCookieDomain(): string {
 		let fullDomain: string = window.location.hostname;
+		if (fullDomain.startsWith('localhost'))
+			return null;
+
+
 		let domainSplitted: string[] = fullDomain.split("\.");
 		if (domainSplitted.length <= 2) {
 			// first level domain

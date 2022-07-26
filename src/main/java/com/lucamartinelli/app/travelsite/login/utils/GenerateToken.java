@@ -8,6 +8,7 @@ import org.jboss.logging.Logger;
 
 import com.lucamartinelli.app.travelsite.login.vo.UserVO;
 
+import io.smallrye.jwt.algorithm.KeyEncryptionAlgorithm;
 import io.smallrye.jwt.build.Jwt;
 
 public class GenerateToken {
@@ -38,6 +39,8 @@ public class GenerateToken {
 						+ NumberUtils.toLong(expirationDelta, 86400000L))
 				.jws()
 				.innerSign()
+				.header("cty", "JWT")
+				.keyAlgorithm(KeyEncryptionAlgorithm.RSA_OAEP_256)
 				.encrypt();
 		log.debug("Generated JWT: " + token);
 		return token;

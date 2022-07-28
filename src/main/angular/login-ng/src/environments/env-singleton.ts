@@ -3,8 +3,9 @@ export class EnvSingleton {
 	private _homeHost: string;
 	private _hotelHost: string;
 	private _loginHost: string;
-	private _registrationHost: string;
 	private _userMngHost: string;
+	private _registration: string;
+	private _staticContent: string;
     
 
     /**
@@ -45,16 +46,22 @@ export class EnvSingleton {
     public get loginHost(): string {
         return this._loginHost;
     }
-    public set registrationHost(value: string) {
-        this._registrationHost = value;
-    }
-    public get registrationHost(): string {
-        return this._registrationHost;
-    }
     public set userMngHost(value: string) {
         this._userMngHost = value;
     }
     public get userMngHost(): string {
         return this._userMngHost;
+    }
+    public set registrationHost(value: string) {
+        this._registration = value;
+    }
+    public get registrationHost(): string {
+        return this._registration;
+    }
+    public set staticContentHost(value: string) {
+        this._registration = value;
+    }
+    public get staticContentHost(): string {
+        return this._registration;
     }
 }

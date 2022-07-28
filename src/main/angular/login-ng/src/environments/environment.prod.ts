@@ -7,7 +7,6 @@ export const environment = {
 };
 
 
-
 @Injectable({
 	providedIn: 'root'
 })
@@ -24,8 +23,10 @@ export class Environment {
 	}
 	
 	public static getHotelHost(): string {
+		console.log("carco host hotel");
 		if (!this.singleton.hotelHost)
 			this.singleton.hotelHost = RestServiceEnvUrl.getHostUrl('hotel');
+		console.log("caricato " + this.singleton.hotelHost);
 		return this.singleton.hotelHost;
 	}
 	
@@ -34,17 +35,23 @@ export class Environment {
 			this.singleton.loginHost = RestServiceEnvUrl.getHostUrl('login');
 		return this.singleton.loginHost;
 	}
+	
+	public static getUserManagerHost(): string {
+		if (!this.singleton.userMngHost)
+			this.singleton.userMngHost = RestServiceEnvUrl.getHostUrl('user-management');
+		return this.singleton.userMngHost;
+	}
 
 	public static getRegistrationHost(): string {
 		if (!this.singleton.registrationHost)
 			this.singleton.registrationHost = RestServiceEnvUrl.getHostUrl('registration');
 		return this.singleton.registrationHost;
 	}
-	
-	public static getUserManagerHost(): string {
-		if (!this.singleton.userMngHost)
-			this.singleton.userMngHost = RestServiceEnvUrl.getHostUrl('user-management');
-		return this.singleton.userMngHost;
+
+	public static getStaticContentHost(): string {
+		if (!this.singleton.staticContentHost)
+			this.singleton.staticContentHost = RestServiceEnvUrl.getHostUrl('static-content');
+		return this.singleton.staticContentHost;
 	}
 	
 	

@@ -35,13 +35,17 @@ export class Environment {
 	public static getLoginHost(): string {
 		return 'http://localhost:7070';
 	}
-
-	public static getRegistrationHost(): string {
-		return 'http://localhost:7171';
-	}
 	
 	public static getUserManagerHost(): string {
 		return "http://localhost:7071";
+	}
+
+	public static getRegistrationHost(): string {
+		return "http://localhost:7171";
+	}
+
+	public static getStaticContentHost(): string {
+		return "https://localhost:5000";
 	}
 	
 }
